@@ -1,0 +1,11 @@
+from django.core.files.storage import DefaultStorage
+from filebrowser.sites import FileBrowserSite
+
+class FileBrowserSite(FileBrowserSite):
+    def browse(self, request):
+        self.directory = self.directory + str(request.user) + '/'
+        return super(FileBrowserSite, self).browse(request)
+
+storage = DefaultStorage()
+site = FileBrowserSite(name='file', storage=storage)
+site.directory = "content/"

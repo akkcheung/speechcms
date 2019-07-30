@@ -1,11 +1,10 @@
 {% extends 'base.html' %}
 
 {% load crispy_forms_tags %}
-<h3>Qualification Competency Assessment</h3>
 
+{% block content %}
 <form method="post">
   <h3>1. Personal details</h3>
-{% block content %}
   {% csrf_token %}
   {{ applicant_form.title|as_crispy_field }}
   <div class="form-row">
@@ -64,6 +63,8 @@
   {% crispy professional_recognition_formset helper_pr %}
   <h3>5. Speech therapy related work experience</h3>
   {% crispy work_experience_formset helper_we %}
+  <h3>6. Upload Document(s)</h3>
+  {% crispy document_form %}
   <button type="submit" class="btn btn-success">Save Application</button>
 </form>
 {% endblock %}
