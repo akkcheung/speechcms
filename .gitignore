@@ -8,3 +8,4 @@ venv
 /cms/migrations
 /media
 /sent_emails
+*.old

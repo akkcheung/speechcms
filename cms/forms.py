@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import formset_factory
+from django.forms import formset_factory, modelformset_factory
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -39,9 +39,9 @@ class ApplicantFormShort(forms.ModelForm):
 '''
 
 class LanguageCompetenceForm(forms.ModelForm):
-    dominant_language_other = forms.CharField(label='Others', max_length=100)
-    language_in_which_speech_therapy_training_was_conducted_other = forms.CharField(label='Others', max_length=100)
-    language_to_provide_speech_therapy_other = forms.CharField(label='Others', max_length=100)
+    dominant_language_other = forms.CharField(label='Others', max_length=100, required=False)
+    language_in_which_speech_therapy_training_was_conducted_other = forms.CharField(label='Others', max_length=100, required=False)
+    language_to_provide_speech_therapy_other = forms.CharField(label='Others', max_length=100, required=False)
 
     class Meta:
         model = LanguageCompetence
@@ -57,81 +57,57 @@ class ProfessionalQualificationForm(forms.ModelForm):
             attrs={'type': 'date'}
         )
     )
+    country_name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': ''}), required=False)
 
     class Meta:
         model = ProfessionalQualification
         #fields = ('degree_name_relevant_to_speech_therapy', 'english_translation_of_degree_name', 'university_name', 'english_university_name', 'country_name', 'language_of_instruction', 'graduation_date', 'qualifiation_framework_level')
         exclude = { 'user', }
 
-ProfessionalQualificationFormset = formset_factory(ProfessionalQualificationForm, max_num=3, extra=3)
+#ProfessionalQualificationFormset = formset_factory(ProfessionalQualificationForm, max_num=3, extra=3)
+#ProfessionalQualificationFormset = modelformset_factory(ProfessionalQualification,  exclude = { 'user', }, max_num=3, extra=3)
+#ProfessionalQualificationFormset = modelformset_factory(form=ProfessionalQualificationForm, model=ProfessionalQualification, max_num=3, extra=3)
+ProfessionalQualificationFormset = modelformset_factory(form=ProfessionalQualificationForm, model=ProfessionalQualification, max_num=3, extra=1)
 
 class ProfessionalRecognitionForm(forms.ModelForm):
+
+    expiry_date = forms.DateField(
+        widget=forms.TextInput(
+            attrs={'type': 'date'}
+        )
+    )
+
     class Meta:
         model = ProfessionalRecognition
         #fields = ('country_name', 'organization_name', 'membership_type', 'expiry_date')
         exclude = { 'user', }
 
+#ProfessionalRecognitionFormset = formset_factory(ProfessionalRecognitionForm, max_num=2, extra=2)
+#ProfessionalRecognitionFormset = modelformset_factory(ProfessionalRecognition,  exclude = {'user',}, max_num=2, extra=2)
+ProfessionalRecognitionFormset = modelformset_factory(form=ProfessionalRecognitionForm, model=ProfessionalRecognition, max_num=2, extra=1)
 
 class WorkExperienceForm(forms.ModelForm):
+
+    start_date = forms.DateField(
+        widget=forms.TextInput(
+            attrs={'type': 'date'}
+        )
+    )
+
+    end_date = forms.DateField(
+        widget=forms.TextInput(
+            attrs={'type': 'date'}
+        )
+    )
+
     class Meta:
         model = WorkExperience
-        fields = ('employer_name', 'job_title', 'start_date', 'end_date')
-'''
-class ProfessionalQualificationFormSetHelper(FormHelper):
-    def __init__(self, *args, **kwargs):
-        super(ProfessionalQualificationFormSetHelper, self).__init__(*args, **kwargs)
-        #self.form_method = 'post'
-        self.layout = Layout(
-            Row(
-                Column('degree_name_relevant_to_speech_therapy', css_class='form-group col-md-3 mb-0'),
-                Column('english_translation_of_degree_name', css_class='form-group col-md-3 mb-0'),
-                Column('university_name', css_class='form-group col-md-3 mb-0'),
-                Column('english_university_name', css_class='form-group col-md-3 mb-0'),
-                css_class='form-row'
-            ),
-            Row(
-                Column('country_name', css_class='form-group col-md-3 mb-0'),
-                Column('language_of_instruction', css_class='form-group col-md-3 mb-0'),
-                Column('graduation_date', css_class='form-group col-md-3 mb-0'),
-                Column('qualifiation_framework_level', css_class='form-group col-md-3 mb-0'),
-                css_class='form-row'
-            )
-        )
-        self.render_required_fields = True
-'''
+        #fields = ('employer_name', 'job_title', 'start_date', 'end_date')
+        exclude = { 'user', }
 
-'''
-class ProfessionalRecognitionFormSetHelper(FormHelper):
-    def __init__(self, *args, **kwargs):
-        super(ProfessionalRecognitionFormSetHelper, self).__init__(*args, **kwargs)
-        #self.form_method = 'post'
-        self.layout = Layout(
-            Row(
-                Column('country_name', css_class='form-group col-md-3 mb-0'),
-                Column('organization_name', css_class='form-group col-md-3 mb-0'),
-                Column('membership_type', css_class='form-group col-md-3 mb-0'),
-                Column('expiry_date', css_class='form-group col-md-3 mb-0'),
-                css_class='form-row'
-            )
-        )
-        self.render_required_fields = True
-'''
+#WorkExperienceFormset = formset_factory(WorkExperienceForm, max_num=3, extra=3)
+WorkExperienceFormset = modelformset_factory(form=WorkExperienceForm, model=WorkExperience, max_num=3, extra=1)
 
-'''
-class WorkExperienceFormSetHelper(FormHelper):
-    def __init__(self, *args, **kwargs):
-        super(WorkExperienceFormSetHelper, self).__init__(*args, **kwargs)
-        self.layout = Layout(
-            Row(
-                Column('employer_name', css_class='form-group col-md-4 mb-0'),
-                Column('job_title', css_class='form-group col-md-4 mb-0'),
-                Column('start_date', css_class='form-group col-md-2 mb-0'),
-                Column('end_date', css_class='form-group col-md-2 mb-0'),
-                css_class='form-row'
-            )
-        )
-        self.render_required_fields = True
-'''
 
 class DocumentForm(forms.ModelForm):
     class Meta:

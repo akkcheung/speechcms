@@ -1,0 +1,271 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<script type="text/javascript">
+  $(document).ready(function() {
+
+    $('#add_more').click(function() {
+      var form_idx = $('#id_form-TOTAL_FORMS').val();
+      // console.log("form_idx : " + form_idx);
+      $('#form_set').append($('#empty_form').html().replace(/__prefix__/g, form_idx));
+      // console.log($('#empty_form').html());
+      $('#id_form-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+      console.log("id_form-TOTAL_FORMS : " + $('#id_form-TOTAL_FORMS').val());
+    });
+
+    $('#add_more_pr').click(function() {
+      var form_idx = $('#id_pr-TOTAL_FORMS').val();
+      // console.log("form_idx : " + form_idx);
+      $('#form_set_pr').append($('#empty_form_pr').html().replace(/__prefix__/g, form_idx));
+      // console.log($('#empty_form').html());
+      $('#id_pr-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+      console.log("id_pr-TOTAL_FORMS : " + $('#id_pr-TOTAL_FORMS').val());
+    });
+
+    $('#add_more_wk').click(function() {
+      var form_idx = $('#id_wk-TOTAL_FORMS').val();
+      // console.log("form_idx : " + form_idx);
+      $('#form_set_wk').append($('#empty_form_wk').html().replace(/__prefix__/g, form_idx));
+      // console.log($('#empty_form').html());
+      $('#id_wk-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+      console.log("id_wk-TOTAL_FORMS : " + $('#id_wk-TOTAL_FORMS').val());
+    });
+
+  });
+</script>
+
+<h3>Qualification Competency Assessment</h3>
+
+{% if form.errors %}
+{% for field in form %}
+{% for error in field.errors %}
+<div class="alert alert-danger">
+  <strong>{{ error|escape }}</strong>
+</div>
+{% endfor %}
+{% endfor %}
+{% for error in form.non_field_errors %}
+<div class="alert alert-danger">
+  <strong>{{ error|escape }}</strong>
+</div>
+{% endfor %}
+{% endif %}
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="row">
+    <div class="col-3">
+      {{ p_form.title|as_crispy_field }}
+    </div>
+    <div class="col-3">
+      {{ p_form.date_of_birth|as_crispy_field }}
+    </div>
+    <div class="col-6">
+      {{ p_form.country_of_birth|as_crispy_field }}
+    </div>
+  </div>
+  {{ p_form.address|as_crispy_field }}
+  <div class="row">
+    <div class="col-6">
+      {{ p_form.phone|as_crispy_field }}
+    </div>
+    <div class="col-6">
+      {{ user.email }}
+    </div>
+  </div>
+  <h3>2. Language Competence</h3>
+  <div class="form-row">
+    <div class="form-group col-md-6 mb-0">
+      {{ lc_form.dominant_language|as_crispy_field }}
+    </div>
+    <div class="form-group col-md-6 mb-0">
+      {{ lc_form.dominant_language_other|as_crispy_field }}
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6 mb-0">
+      {{ lc_form.language_in_which_speech_therapy_training_was_conducted|as_crispy_field }}
+    </div>
+    <div class="form-group col-md-6 mb-0">
+      {{ lc_form.language_in_which_speech_therapy_training_was_conducted_other|as_crispy_field }}
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6 mb-0">
+      {{ lc_form.language_to_provide_speech_therapy|as_crispy_field }}
+    </div>
+    <div class="form-group col-md-6 mb-0">
+      {{ lc_form.language_to_provide_speech_therapy_other|as_crispy_field }}
+    </div>
+  </div>
+  <h3>3. Professional qualifications</h3>
+  {{ formset_pq.management_form }}
+  <div id="form_set">
+    {% for form in formset_pq.forms %}
+    {{form.non_field_errors}}
+    {{form.errors}}
+    {{ form.id | as_crispy_field }}
+    <div class="form-row">
+      <div class="form-group col-md-3 mb-0">
+        {{ form.degree_name_relevant_to_speech_therapy |as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ form.english_translation_of_degree_name |as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ form.university_name |as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ form.english_university_name |as_crispy_field }}
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-3 mb-0">
+        {{ form.country_name |as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ form.language_of_instruction |as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ form.graduation_date |as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ form.qualifiation_framework_level |as_crispy_field }}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <input type="button" value="Add More" id="add_more">
+
+  <div id="empty_form" style="display:none">
+    <div class="form-row">
+      <div class="form-group col-md-3 mb-0">
+        {{ formset_pq.empty_form.degree_name_relevant_to_speech_therapy |as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ formset_pq.empty_form.english_translation_of_degree_name |as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ formset_pq.empty_form.university_name |as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ formset_pq.empty_form.english_university_name |as_crispy_field }}
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-3 mb-0">
+        {{ formset_pq.empty_form.country_name | as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ formset_pq.empty_form.language_of_instruction |as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ formset_pq.empty_form.graduation_date |as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ formset_pq.empty_form.qualifiation_framework_level |as_crispy_field }}
+      </div>
+    </div>
+  </div>
+  {{ form_doc.non_field_errors }}
+  {{ form_doc.errors }}
+  {{ form_doc.as_p  }}
+
+  <h3>4. Professional recognition</h3>
+  {{ formset_pr.management_form }}
+  <div id="form_set_pr">
+    {% for form in formset_pr %}
+    {{form.non_field_errors}}
+    {{form.errors}}
+    {{ form.id | as_crispy_field }}
+    <div class="form-row">
+      <div class="form-group col-md-3 mb-0">
+        {{ form.country_name |as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ form.organization_name |as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ form.membership_type |as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ form.expiry_date |as_crispy_field }}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <input type="button" value="Add More" id="add_more_pr">
+  <div id="empty_form_pr" style="display:none">
+    <div class="form-row">
+      <div class="form-group col-md-3 mb-0">
+        {{ formset_pr.empty_form.country_name |as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ formset_pr.empty_form.organization_name |as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ formset_pr.empty_form.membership_type |as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ formset_pr.empty_form.expiry_date |as_crispy_field }}
+      </div>
+    </div>
+  </div>
+  {{ form_doc_a.non_field_errors }}
+  {{ form_doc_a.errors }}
+  {{ form_doc_a.as_p  }}
+
+  <h3>5. Speech therapy related work experience</h3>
+  {{ formset_wk.management_form }}
+  <div id="form_set_wk">
+    {% for form in formset_wk %}
+    {{form.non_field_errors}}
+    {{form.errors}}
+    {{ form.id | as_crispy_field }}
+    <div class="form-row">
+      <div class="form-group col-md-3 mb-0">
+        {{ form.employer_name |as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ form.job_title |as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ form.start_date |as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ form.end_date |as_crispy_field }}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <input type="button" value="Add More" id="add_more_wk">
+  <div id="empty_form_wk" style="display:none">
+    <div class="form-row">
+      <div class="form-group col-md-3 mb-0">
+        {{ formset_wk.empty_form.employer_name |as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ formset_wk.empty_form.job_title |as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ formset_wk.empty_form.start_date |as_crispy_field }}
+      </div>
+      <div class="form-group col-md-3 mb-0">
+        {{ formset_wk.empty_form.end_date |as_crispy_field }}
+      </div>
+    </div>
+  </div>
+  {{ form_doc_b.non_field_errors }}
+  {{ form_doc_b.errors }}
+  {{ form_doc_b.as_p  }}
+
+  <hr>
+  <button type="submit" class="btn btn-success">Save Assessment Form</button>
+</form>
+
+{% endblock %}

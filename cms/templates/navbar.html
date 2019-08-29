@@ -1,18 +1,72 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Navbar</a>
+  <!-- <a class="navbar-brand" href="#">Navbar</a>
+  -->
   <div id="navbarNav">
     <ul class="navbar-nav">
+      {% if request.user.is_staff %}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Admin
+        </a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="/cms/users">List Registered Users</a>
+        </div>
+      </li>
+      {% endif %}
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'index' %}">Home</a>
+        <a class="nav-link" href="/cms/page/news">Home</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="{% url 'about' %}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          About Us
+        </a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="/cms/page/governance">Governance</a>
+          <a class="dropdown-item" href="/cms/page/committee">Committee</a>
+          <!--
+         <div class="dropdown-divider"></div>
+         <a class="dropdown-item" href="#">Something else here</a>
+         -->
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Registration
+        </a>
+        <div class="dropdown-menu">
+          <!--
+          <a class="dropdown-item" href="#">SignUp</a>
+          -->
+          <a class="dropdown-item" href="/cms/registrants">List of Registrants</a>
+          <a class="dropdown-item" href="/cms/page/accreditation-training">Accreditation Of Training</a>
+          <!--
+         <div class="dropdown-divider"></div>
+         <a class="dropdown-item" href="#">Something else here</a>
+         -->
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Conduct And Discipline
+        </a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="/cms/page/standard-registrants">Code of Practice</a>
+          <a class="dropdown-item" href="/cms/page/quotable-qualifications">Quotable Qualifications</a>
+          <a class="dropdown-item" href="/cms/page/complaints-handling-procedures">Compliants Handling Procedures</a>
+          <a class="dropdown-item" href="/cms/page/disciplinary-enquires">Disciplinary Enquiries</a>
+        </div>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'index' %}">Registered Members</a>
+        <a class="nav-link" href="/cms/page/cpd">CPD</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'about' %}">About Us</a>
+        <a class="nav-link" href="/cms/page/information-public">Information To Public</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+        <a class="nav-link" href="/cms/page/message-registrants">Message To Registrants</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/cms/page/contact">Contact</a>
       </li>
       {% if user.is_authenticated %}
       <li class="nav-item">

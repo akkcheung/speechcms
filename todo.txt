@@ -1,0 +1,31 @@
+forget password link
+
+mail setting
+
+assessment form validation
+
+view assessment form
+
+import user
+
+content (train user)
+
+create hkist Admin
+
+grant right to modify page
+
+404 if no page
+
+payment history
+
+Register Members list
+
+User list
+
+Next Phase
+==========
+chi/eng
+
+change font size
+
+keyword search

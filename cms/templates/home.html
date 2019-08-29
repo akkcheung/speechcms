@@ -6,27 +6,32 @@
 Hi {{ user.username }}!
 <!-- <p><a href="{% url 'logout' %}">logout</a></p> -->
 
-<p>
-<h4>Paid Annual Fee {{ fee.amount }}</h4>
+</p>
+<h4>Paid Annual Fee HK${{ fee.amount }}</h4>
 
 <form action="{% url 'charge' %}" method="post">
   {% csrf_token %}
 
-<input type="hidden" id="description" name="description" value="{{ fee.description }}" >
-<input type="hidden" id="amount" name="amount" value="{{ amount|floatformat }}" >
-<input type="hidden" id="fee_amount" name="fee_amount" value="{{ fee.amount }}" >
+  <input type="hidden" id="description" name="description" value="{{ fee.description }}">
+  <input type="hidden" id="amount" name="amount" value="{{ amount|floatformat }}">
+  <input type="hidden" id="fee_amount" name="fee_amount" value="{{ fee.amount }}">
 
-<script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="{{ key }}"
-  data-description="{{ fee.description }}" data-amount="{{ amount|floatformat }}" data-locale="auto">
-</script>
+  <script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="{{ key }}" data-description="{{ fee.description }}" data-amount="{{ amount|floatformat }}" data-locale="auto">
+  </script>
 
 </form>
 
-<p><p>
-<a href="{% url 'index' %}">View my payment history</a>
+</p>
+</p>
+<a href="{% url 'list_payment_history' %}">View my payment history</a>
 
-<p><p>
+</p>
+</p>
+{% if personDetail_list %}
+<a href="{% url 'assessment-form-edit' %}">View my Qualification Competency Assessment</a>
+{% else %}
 <a href="{% url 'assessment-form' %}">Fill my Qualification Competency Assessment</a>
+{% endif %}
 
 {% else %}
 

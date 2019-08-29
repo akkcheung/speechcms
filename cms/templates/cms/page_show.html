@@ -1,4 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
-{{ title }}
+
+{% if request.user.is_staff %}
+<a href="/cms/page/{{ page.pk }}/edit">Edit</a>
+{% endif %}
+<p></p>
+{% autoescape off %}
+{% if page.title is not None %}
+{{ page.title }}
+{% endif %}
+{{ page.content }}
+{% endautoescape %}
+
+
 {% endblock %}

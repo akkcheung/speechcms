@@ -106,6 +106,7 @@ class ProfessionalQualification(models.Model):
     english_university_name = models.CharField(max_length=200)
     country_name = models.CharField(max_length=200)
     language_of_instruction = models.CharField(max_length=200)
+    #graduation_date = models.DateField(null=True, blank=True, default=datetime.date.today)
     graduation_date = models.DateField(null=True, blank=True)
     qualifiation_framework_level = models.CharField(max_length=200)
 
@@ -120,7 +121,8 @@ class ProfessionalRecognition(models.Model):
     country_name = models.CharField(max_length=200)
     organization_name = models.CharField(max_length=200)
     membership_type = models.CharField(max_length=200)
-    expiry_date = models.DateField(null=False, blank=False)
+    #expiry_date = models.DateField(null=False, blank=False)
+    expiry_date = models.DateField(null=True, blank=True)
 
     #applicant = models.ForeignKey('Applicant', on_delete=models.SET_NULL, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -131,8 +133,10 @@ class ProfessionalRecognition(models.Model):
 class WorkExperience(models.Model):
     employer_name = models.CharField(max_length=200)
     job_title = models.CharField(max_length=200)
-    start_date = models.DateField(null=False, blank=False)
-    end_date = models.DateField(null=False, blank=False)
+    #start_date = models.DateField(null=False, blank=False)
+    start_date = models.DateField(null=True, blank=True)
+    #end_date = models.DateField(null=False, blank=False)
+    end_date = models.DateField(null=True, blank=True)
 
     #applicant = models.ForeignKey('Applicant', on_delete=models.SET_NULL, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -141,7 +145,8 @@ class WorkExperience(models.Model):
         return f'{self.job_title}'
 
 class Document(models.Model):
-    description = models.CharField(max_length=255, blank=True)
+    #description = models.CharField(max_length=255, blank=True)
+    description = models.CharField(max_length=255, blank=False)
     #document = models.FileField(upload_to='documents/')
     document = models.FileField(upload_to='documents/', validators=[validate_file_size])
     uploaded_at = models.DateTimeField(auto_now_add=True)
@@ -164,7 +169,7 @@ class News(models.Model):
 
 class Page(models.Model):
     url_path = models.CharField(max_length=200, default='')
-    title = models.CharField(max_length=200, default='')
+    title = models.CharField(max_length=200, default='', null=True, blank=True)
     publish_date = models.DateField(null=False, blank=False)
     content = HTMLField('Content')
     is_publish = models.BooleanField(default=False)
@@ -172,27 +177,47 @@ class Page(models.Model):
     #def __str__(self)
     #    return f'{self.title}'
 
-
+    def get_absolute_url(self):
+        #return reverse('book-detail', args=[str(self.id)])
+        return reverse('page-show', args=[str(self.url_path)])
 
 class Points(models.Model):
     start_date = models.DateField(null=False, blank=False)
     end_date = models.DateField(null=False, blank=False)
     points = models.IntegerField(default = 0)
 
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
 class Profile(models.Model):
     #user = models.OneToOneField(User, on_delete=models.CASCADE)
     #user = models.OneToOneField(settings.AUTH_USER_MODEL)
+    is_verfiy = models.BooleanField(default=False)
+    is_assessment_form_declare = models.BooleanField(default=False)
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     #bio = models.TextField(max_length=500, blank=True)
     #location = models.CharField(max_length=30, blank=True)
     #join_date = models.DateField(null=True, blank=True)
-    is_verfiy = models.BooleanField(default=False)
 
-    #payments
-    #point
 
 class PersonDetail(models.Model):
+    TITLE = (
+        ('Prof', 'Prof'),
+        ('Dr', 'Dr'),
+        ('Mr', 'Mr'),
+        ('Mrs', 'Mrs'),
+        ('Ms', 'Ms'),
+        )
+
+    title = models.CharField(
+        max_length=4,
+        choices=TITLE,
+        blank=True,
+        default='',
+        #help_text='Dominant Language',
+    )
+
     date_of_birth = models.DateField(null=False, default=datetime.date.today)
     country_of_birth = models.CharField(max_length=10, default='HK')
     address = models.CharField(max_length=300, default='')
@@ -208,6 +233,15 @@ class PaymentHistory(models.Model):
 
     #user = models.ForeignKey(User, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+    #list_display = (date, user, description, currency amounts)
+    #list_display = PaymentHistory._meta.get_all_field_names()
+
+    def __str__(self):
+        return f'{self.description} { self.user}'
+
+
+
 
 class Fee(models.Model):
     date_effective = models.DateField(null=False, default=datetime.date.today)

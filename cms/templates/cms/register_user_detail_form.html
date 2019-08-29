@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h3> Page </h3>
+  <div class="row form-error">
+     <div class="column" id="content">
+         <form  method="post" action='' enctype="multipart/form-data">
+             {% csrf_token %}
+             {{ form.as_p  }}
+             <input class="button" type="submit" value="Save">
+         </form>
+     </div>
+ </div>
+{% endblock %}
