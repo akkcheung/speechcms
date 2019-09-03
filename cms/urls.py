@@ -1,8 +1,8 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf import settings
 #from django.conf.urls.static import static
 from django.views.generic.base import TemplateView
-
+from django.http import HttpResponseForbidden
 
 from . import views
 #from .filebrowser import site
@@ -68,6 +68,10 @@ urlpatterns += [
     path('payment-history/', views.PaymentHistoryListView.as_view(), name='list_payment_history'),
 ]
 
+urlpatterns += [
+    #re_path(r'media/documents/(?P<file>.*)$', views.serve_protected_document, name='serve_protected_document'),
+    path('media/documents/<path:filename>', views.serve_protected_document),
+]
 #urlpatterns += [
 #    url(r'^admin/content/file/', include(site.urls)),
 #]

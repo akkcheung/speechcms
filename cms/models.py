@@ -2,9 +2,11 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 
+from django.core.exceptions import ValidationError
+
 #from tinymce import models as tinymce_models
 from tinymce import HTMLField
-from .validators import validate_file_size
+from .validators import validate_file_size, validate_file_extension
 
 import datetime
 
@@ -148,11 +150,16 @@ class Document(models.Model):
     #description = models.CharField(max_length=255, blank=True)
     description = models.CharField(max_length=255, blank=False)
     #document = models.FileField(upload_to='documents/')
-    document = models.FileField(upload_to='documents/', validators=[validate_file_size])
+    #document = models.FileField(upload_to='documents/', validators=[validate_file_size])
+    document = models.FileField(upload_to='documents/', validators=[validate_file_extension])
+
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     #applicant = models.ForeignKey('Applicant', on_delete=models.SET_NULL, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+
+
 
 
 class News(models.Model):
@@ -239,8 +246,6 @@ class PaymentHistory(models.Model):
 
     def __str__(self):
         return f'{self.description} { self.user}'
-
-
 
 
 class Fee(models.Model):

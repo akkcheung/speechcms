@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from django.forms.models import  modelformset_factory, inlineformset_factory, model_to_dict
 from django.views.generic import CreateView, UpdateView, DeleteView
 from django.views import generic
@@ -35,8 +35,12 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 def index(request):
     #return HttpResponse('hello from index')
-    context = {}
-    return render(request, 'cms/index.html', context)
+
+    #context = {}
+    #return render(request, 'cms/index.html', context)
+
+    response = redirect('/cms/page/news')
+    return response
 
 def about(request):
    return HttpResponse('hello from about')
@@ -448,6 +452,24 @@ class PaymentHistoryListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         return PaymentHistory.objects.filter(user=self.request.user).order_by('-date')
+
+@login_required()
+def serve_protected_document(request, file):
+
+    print ('file')
+    print (file)
+    #document = get_object_or_404(Document, document="media/documents/" + file)
+    document = get_object_or_404(Document, document="documents/" + file)
+
+    # Split the elements of the path
+    #path, file_name = os.path.split(file)
+
+    #response = FileResponse(document.file,)
+    response = FileResponse(document.document,)
+    #response["Content-Disposition"] = "attachment; filename=" + file_name
+    response["Content-Disposition"] = "attachment; filename=" + file
+
+    return response
 
 '''
 def handle_uploaded_file(f):

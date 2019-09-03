@@ -22,6 +22,10 @@ Register Members list
 
 User list
 
+upload - restrict to doc, xls format
+
+You don't have permission to access /media/documents/mail.png on this server.
+
 Next Phase
 ==========
 chi/eng
