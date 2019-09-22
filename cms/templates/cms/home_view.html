@@ -6,6 +6,7 @@
 Hi {{ user.username }}!
 <!-- <p><a href="{% url 'logout' %}">logout</a></p> -->
 
+<!--
 <p>
   <h4>Paid Annual Fee HKD{{ fee.amount }}</h4>
 
@@ -22,6 +23,8 @@ Hi {{ user.username }}!
   </form>
 
 </p>
+-->
+
 </p>
 {% if request.user.is_staff %}
 <a href="{% url 'list_payment_history' %}">View [{{ member.username }}] payment history</a>
@@ -30,8 +33,12 @@ Hi {{ user.username }}!
 </p>
 </p>
 {% if request.user.is_staff %}
+{% if personDetail_list %}
 <a href="{% url 'assessment-form-edit' member.username %}">View [{{ member.username }}] Qualification Competency Assessment</a>
+{% endif %}
 
+<p></p>
+<a href="{% url 'cpd-activity-form-edit' member.username %}">View [{{ member.username }}] record of Continuing Professional Development (CPD)</a>
 {% endif %}
 
 {% else %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#form-main select').prop('disabled', true);
+  });
+</script>
+
+<form method="post" enctype="multipart/form-data" id="form-main">
+  {% csrf_token %}
+
+  <h3>Record of Continuing Professional Development</h3>
+  {{ formset_member_cpd_activity.management_form }}
+
+  <p></p>
+  {% for form in formset_member_cpd_activity %}
+  {{form.non_field_errors}}
+  {{form.errors}}
+  {{ form.id.as_hidden }}
+  {{ form.year.as_hidden }}
+  {{ form.cpd_activity.as_hidden }}
+  <div class="form-row">
+    <div class="form-group col-md-9 mb-0">
+      {{ form.cpd_activity | as_crispy_field }}
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-9 mb-0">
+      {{ form.activity_description |as_crispy_field }}
+    </div>
+    <div class="form-group col-md-3 mb-0">
+      {{ form.point_awarded |as_crispy_field }}
+    </div>
+  </div>
+  {% endfor %}
+
+  <hr>
+  <button type="submit" class="btn btn-success">Save Activity</button>
+</form>
+
+{% endblock %}

@@ -33,6 +33,9 @@ Hi {{ user.username }}!
 <a href="{% url 'assessment-form' %}">Fill my Qualification Competency Assessment</a>
 {% endif %}
 
+<p></p>
+<a href="{% url 'cpd-activity-form-edit' %}">Fill my Record of Continuing Professional Development (CPD)</a>
+
 {% else %}
 
 <p>You are not logged in</p>

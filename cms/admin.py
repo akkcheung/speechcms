@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.models import Permission
 
 #from .models import Applicant, LanguageCompetence, ProfessionalQualification, ProfessionalRecognition, WorkExperience, News, Page, Fee
-from .models import LanguageCompetence, ProfessionalQualification, ProfessionalRecognition, WorkExperience, News, Page, Fee, PaymentHistory
+from .models import LanguageCompetence, ProfessionalQualification, ProfessionalRecognition, WorkExperience, News, Page, Fee, PaymentHistory, CpdActivity, MemberCpdActivity
 
 # Register your models here.
 admin.site.register(Permission)
@@ -49,3 +49,17 @@ class WorkExperienceAdmin(admin.ModelAdmin):
     list_per_page = 25
 
 admin.site.register(WorkExperience, WorkExperienceAdmin)
+
+class CpdActivityAdmin(admin.ModelAdmin):
+    list_display = ('id', 'order_num', 'activity_category')
+    list_display_links = ('id',)
+    list_per_page = 25
+
+class MemberCpdActivityAdmin(admin.ModelAdmin):
+    list_display = ('id', 'cpd_activity', 'activity_description', 'user' )
+    list_display_links = ('id',)
+    list_per_page = 25
+
+admin.site.register(CpdActivity, CpdActivityAdmin)
+
+admin.site.register(MemberCpdActivity, MemberCpdActivityAdmin)

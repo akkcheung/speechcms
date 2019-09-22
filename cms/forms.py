@@ -8,7 +8,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Row, Column
 
 #from .models import Applicant, LanguageCompetence, WorkExperience, ProfessionalQualification, ProfessionalRecognition, Document, News, Page, PersonDetail
-from .models import LanguageCompetence, WorkExperience, ProfessionalQualification, ProfessionalRecognition, Document, News, Page, PersonDetail
+from .models import LanguageCompetence, WorkExperience, ProfessionalQualification, ProfessionalRecognition, Document, News, Page, PersonDetail, MemberCpdActivity, CpdActivity
 
 #from tinymce.widgets import TinyMCE
 from tinymce import TinyMCE
@@ -182,11 +182,9 @@ class SignUpForm(UserCreationForm):
 class PersonDetailForm(forms.ModelForm):
 
     date_of_birth = forms.DateField(
-
         widget=forms.TextInput(
             attrs={'type': 'date'}
         )
-
         #widget=forms.SelectDateWidget(years, months, empty_label)
     )
 
@@ -199,3 +197,15 @@ class PersonDetailForm(forms.ModelForm):
     #def __init__(self, *args, **kwargs):
     #    user = kwargs.pop('user','')
     #    super(PersonDetailForm, self).__init__(*args, **kwargs)
+
+
+class MemberCpdActivityForm(forms.ModelForm):
+    #activity_descripion = forms.CharField(required=True)
+    point_awarded = forms.DecimalField( max_digits=3, decimal_places=1)
+    # activity_descripion = forms.t
+
+    class Meta:
+        model = MemberCpdActivity
+        exclude = { 'user', }
+
+MemberCpdActivityFormset = modelformset_factory(form=MemberCpdActivityForm, model=MemberCpdActivity, max_num=10, extra=0)

@@ -24,10 +24,11 @@ import json
 
 #from .models import Applicant, WorkExperience, ProfessionalQualification, ProfessionalRecognition, News, Page, Fee, PaymentHistory
 
-from .models import WorkExperience, ProfessionalQualification, ProfessionalRecognition, News, Page, Fee, PaymentHistory, PersonDetail, LanguageCompetence, Document
+from .models import WorkExperience, ProfessionalQualification, ProfessionalRecognition, News, Page, Fee, PaymentHistory, PersonDetail, LanguageCompetence, Document, MemberCpdActivity, CpdActivity
 
 #from .forms import ApplicantForm, LanguageCompetenceForm, WorkExperienceForm, ApplicantFormShort, ProfessionalQualificationForm, ProfessionalQualificationFormSetHelper, WorkExperienceFormSetHelper, ProfessionalRecognitionForm, ProfessionalRecognitionFormSetHelper, DocumentForm, NewsForm, PageForm, SignUpForm, PersonDetailForm
-from .forms import LanguageCompetenceForm, WorkExperienceForm, ProfessionalQualificationForm,  ProfessionalRecognitionForm,  DocumentForm, NewsForm, PageForm, SignUpForm, PersonDetailForm, ProfessionalQualificationFormset, ProfessionalRecognitionFormset, WorkExperienceFormset
+from .forms import LanguageCompetenceForm, WorkExperienceForm, ProfessionalQualificationForm,  ProfessionalRecognitionForm,  DocumentForm, NewsForm, PageForm, SignUpForm, PersonDetailForm, ProfessionalQualificationFormset, ProfessionalRecognitionFormset, WorkExperienceFormset, MemberCpdActivityFormset
+#， MemberCpdActivityForm
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -159,6 +160,7 @@ class HomeView(TemplateView):
 
         return context
 
+@login_required()
 def home_view(request, username):
     if request.method == 'GET':
         #news_form = NewsForm()
@@ -169,15 +171,18 @@ def home_view(request, username):
         fee_list = Fee.objects.filter(description = 'Annual Subscription Fee')
         fee = fee_list.order_by('-date_effective')[0]
 
+        personDetail_list =  PersonDetail.objects.filter(user=user)
+
         context = {
            'key': settings.STRIPE_PUBLISHABLE_KEY,
            'member': user,
            'fee': fee,
+           'personDetail_list' : personDetail_list,
         }
 
     return render(request, 'cms/home_view.html', context)
 
-
+@login_required()
 def charge(request):
     if request.method == 'POST':
 
@@ -213,6 +218,7 @@ def charge(request):
         #return render(request, 'charge.html')
         return render(request, 'charge.html', context)
 
+@login_required()
 def Assessment_form_create(request):
     user=request.user
     #ProfessionalQualificationFormset = modelformset_factory(ProfessionalQualification, form=ProfessionalQualificationForm, max_num=3, extra=3)
@@ -318,6 +324,7 @@ def Assessment_form_create(request):
     return render(request, 'cms/assessment_form_edit.html', context)
 
 #def Assessment_form_edit(request):
+@login_required()
 def Assessment_form_edit(request, username='None'):
 
     user=request.user
@@ -477,3 +484,63 @@ def handle_uploaded_file(f):
         for chunk in f.chunks():
             destination.write(chunk)
 '''
+
+'''
+def CpdActivity_form_create(request):
+    context = {
+        'user': user,
+    }
+    return render(request, 'cms/cpd_activity_form_edit.html', context)
+'''
+
+@login_required()
+def cpdActivity_form_edit(request, username='None'):
+
+    user=request.user
+
+    if user.is_staff :
+        user = User.objects.filter(username=username).first()
+
+    if request.method == 'POST':
+        formset_member_cpd_activity = MemberCpdActivityFormset(request.POST)
+
+        if all([ formset_member_cpd_activity.is_valid()]) :
+
+            for form in formset_member_cpd_activity:
+                member_cpd_activity = form.save(commit=False)
+                member_cpd_activity.user = user
+                member_cpd_activity.save()
+
+    else :
+        today = datetime.date.today()
+        year = datetime.date.today().year
+
+        if today >= datetime.date(year, 9, 1) and today < datetime.date(year, 10, 1):
+            year = year + 1
+
+        memberCpdActivityList = MemberCpdActivity.objects.filter(user=user, year=year)
+
+        if len(memberCpdActivityList) == 0 :
+
+            for i in range(1,8):
+                #cpdActivity = CpdActivity.objects.filter(order_num=1)[0]
+                cpdActivity = CpdActivity.objects.filter(order_num=i)[0]
+                memberCpdActivity = MemberCpdActivity()
+                memberCpdActivity.cpd_activity = cpdActivity
+                memberCpdActivity.year = year
+                memberCpdActivity.user = user
+                memberCpdActivity.point_awarded = 0
+                memberCpdActivity.save()
+
+        #else :
+        formset_member_cpd_activity = MemberCpdActivityFormset(queryset=MemberCpdActivity.objects.filter(user=user, year=year))
+
+    context = {
+        'user': user,
+        #'memberCpdActivity_list' : memberCpdActivity_list,
+        #'memberCpdActivity_form' : memberCpdActivity_form,
+        #'memberCpdActivity_form_b' : memberCpdActivity_form_b,
+        'formset_member_cpd_activity' : formset_member_cpd_activity,
+    }
+
+    return render(request, 'cms/cpd_activity_form_edit.html', context)

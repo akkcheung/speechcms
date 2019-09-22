@@ -188,12 +188,14 @@ class Page(models.Model):
         #return reverse('book-detail', args=[str(self.id)])
         return reverse('page-show', args=[str(self.url_path)])
 
+'''
 class Points(models.Model):
     start_date = models.DateField(null=False, blank=False)
     end_date = models.DateField(null=False, blank=False)
     points = models.IntegerField(default = 0)
 
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+'''
 
 class Profile(models.Model):
     #user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -256,3 +258,29 @@ class Fee(models.Model):
 
     def __str__(self):
         return f'{self.description}'
+
+class CpdActivity(models.Model):
+    order_num = models.IntegerField()
+    activity_category = models.CharField(max_length=300, default='')
+
+    def __str__(self):
+        # return f'{self.activity_category}'
+        return '{}'.format(self.activity_category)
+
+'''
+class MemberCpdPoint(models.Model):
+    date_effective = models.DateField(null=False)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    category = models.CharField(max_length=300, default='')
+'''
+
+class MemberCpdActivity(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    activity_description = models.TextField(blank=True, null=True)
+    #activity_category = models.CharField(max_length=300, default='')
+    point_awarded = models.DecimalField( max_digits=3, decimal_places=1)
+    year = models.IntegerField(null=True)
+
+    #cpdActivity = models.OneToOneField(CpdActivity, on_delete=models.SET_NULL, null=True)
+    cpd_activity = models.ForeignKey(CpdActivity, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)

@@ -59,6 +59,8 @@ urlpatterns += [
     #path('assessment-form/<slug:url_path>/edit', views.Assessment_form_edit, name='assessment-form-edit'),
     path('assessment-form/edit', views.Assessment_form_edit, name='assessment-form-edit'),
     path('assessment-form/edit/<slug:username>', views.Assessment_form_edit, name='assessment-form-edit'),
+    path('cpd-activity-form/edit', views.cpdActivity_form_edit, name='cpd-activity-form-edit'),
+    path('cpd-activity-form/edit/<slug:username>', views.cpdActivity_form_edit, name='cpd-activity-form-edit'),
 ]
 
 urlpatterns += [
@@ -68,10 +70,12 @@ urlpatterns += [
     path('payment-history/', views.PaymentHistoryListView.as_view(), name='list_payment_history'),
 ]
 
-urlpatterns += [
+
+#urlpatterns += [
     #re_path(r'media/documents/(?P<file>.*)$', views.serve_protected_document, name='serve_protected_document'),
-    path('media/documents/<path:filename>', views.serve_protected_document),
-]
+#    path('media/documents/<path:filename>', views.serve_protected_document),
+#]
+
 #urlpatterns += [
 #    url(r'^admin/content/file/', include(site.urls)),
 #]
