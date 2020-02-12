@@ -1,6 +1,6 @@
 certifi==2019.6.16
 chardet==3.0.4
-Django==2.1
+Django==2.2.10
 django-bootstrap4==0.0.8
 django-crispy-forms==1.7.2
 django-filebrowser-no-grappelli==3.7.8
